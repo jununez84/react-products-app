@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import Table from 'react-bootstrap/Table';
+import { connect } from 'react-redux';
 
+import ProductCategoryRow from './ProductCategoryRow';
 import ProductRow from './ProductRow';
 
 const tableStyle = {
-    minWidth: 500
+	minWidth: 500
 }
 
-const ProductsRow = [
-	<ProductRow name="Football" price="$49.99"/>, 
-	<ProductRow name="Baseball" price="$9.99" />
-]
-
+const mapStateToProps = state => {
+	return {
+		productsRes: state.products,
+	}
+}
 
 class ProductsTable extends Component {
 	render() {
@@ -25,11 +28,44 @@ class ProductsTable extends Component {
 					</tr>
 				</thead>
 				<tbody>
-					{ProductsRow}
+					{this.renderProductRows()}
 				</tbody>
 			</Table>
 		)
 	}
+
+	renderProductRows = () => {
+		const productsByCategory = _.groupBy(this.props.productsRes.products, 'category')
+
+		return _.reduce(productsByCategory, (accumulator, group, key, coll) => {
+			const categoryAcc = [...accumulator, <ProductCategoryRow key={key} category={key} />]
+			return this.addProductsGroup(group, categoryAcc)
+		}, [])
+	}
+
+	addProductsGroup = (productsGroup, categoryAccumulator) => {
+		return _.reduce(productsGroup, (acc, product, index) => {
+			if (this.shouldBeExcluded(product)) return acc
+			return [...acc,
+			<ProductRow
+				key={`${index}_${product.name}`}
+				product={product} />
+			]
+		}, categoryAccumulator)
+	}
+
+	shouldBeExcluded = (product) => {
+		const { filterText, inStockOnly } = this.props;
+
+		return (
+			_.toLower(product.name).indexOf(_.toLower(filterText)) === -1 ||
+			inStockOnly && !product.stocked
+		)
+	}
+
+	isSelected(product) {
+		return this.props.productsRes.selectedProducts.includes(product)
+	}
 }
 
-export default ProductsTable;
+export default connect(mapStateToProps)(ProductsTable);

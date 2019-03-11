@@ -8,12 +8,12 @@ import ProductModal from './ProductModal';
 import ProductsTable from './ProductsTable'
 import SearchBar from './SearchBar';
 
-var showState = false;
+const showState = false;
 
 const cardStyle = {
 	minWidth: 550,
-    borderRadius: 20,
-    backgroundColor: '#eae5fd',
+	borderRadius: 20,
+	backgroundColor: '#eae5fd',
 	margin: 'auto',
 	maxWidth: '600px'
 }
@@ -23,24 +23,47 @@ const titleStyle = {
 	fontSize: '40px'
 }
 
-const FilterableProductTable = props => {
-	console.log("my props", props);
-	return (
-		<div>
-			<Card style={cardStyle}>
-				<Card.Body>
-					<div style={{height: '100px', display: 'flex', alignItems: 'center'}}>
-						<img src={logo} className="App-logo" alt="logo" />
-						<Card.Title style={titleStyle}><i>SEARCHABLE PRODUCT TABLE</i></Card.Title>
-					</div>
-					<SearchBar />
-					<ProductsTable />
-					<Button variant="light" onClick={props.onChangeShowModal}>ADD PRODUCT</Button>
-				</Card.Body>
-			</Card>
-			<ProductModal showModal={props.showModal} onChangeShowModal={props.onChangeShowModal} />
-		</div>
-	)
+class FilterableProductTable extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			filterText: '',
+			inStockOnly: false
+		}
+	}
+
+	render() {
+		return (
+			<div>
+				<Card style={cardStyle}>
+					<Card.Body>
+						<div style={{ height: '100px', display: 'flex', alignItems: 'center' }}>
+							<img src={logo} className="App-logo" alt="logo" />
+							<Card.Title style={titleStyle}><i>SEARCHABLE PRODUCT TABLE</i></Card.Title>
+						</div>
+						<SearchBar
+							filterText={this.state.filterText}
+							inStockOnly={this.state.inStockOnly}
+							onFilterTextChange={this.handleFilterTextChange}
+							onInStockOnlyChange={this.handleInStockChange} />
+						<ProductsTable filterText={this.state.filterText} inStockOnly={this.state.inStockOnly} />
+						<Button variant="light" onClick={this.props.onChangeShowModal}>ADD PRODUCT</Button>
+					</Card.Body>
+				</Card>
+				<ProductModal showModal={this.props.showModal} onChangeShowModal={this.props.onChangeShowModal} />
+			</div>
+		)
+	}
+
+	handleFilterTextChange = (e) => {
+		this.setState({ filterText: e.target.value });
+	}
+
+	handleInStockChange = () => {
+		this.setState({
+			inStockOnly: !this.state.inStockOnly
+		});
+	}
 }
 
 export default FilterableProductTable;

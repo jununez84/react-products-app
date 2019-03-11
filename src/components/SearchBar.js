@@ -5,22 +5,27 @@ import InputGroup from 'react-bootstrap/InputGroup';
 
 const searchBarStyle = {
 	backgroundColor: '#c2b4ff',
-    padding: 20,
-    marginTop: 30,
-    borderRadius: 10
+	padding: 20,
+	marginTop: 30,
+	borderRadius: 10
 }
 
 
 function SearchBar(props) {
-	return(
-		<div style={searchBarStyle}> 
+	return (
+		<div style={searchBarStyle}>
 			<InputGroup>
-				<FormControl 
+				<FormControl
 					type="input"
-					placeholder="Searchable text">
+					placeholder="Searchable text"
+					onChange={props.onFilterTextChange}>
 				</FormControl>
 			</InputGroup>
-			<Form.Check type="checkbox" label="Only show products in stock">
+			<Form.Check
+				checked={props.inStockOnly}
+				onChange={props.onInStockOnlyChange}
+				type="checkbox" 
+				label="Only show products in stock">
 			</Form.Check>
 		</div>
 	)
