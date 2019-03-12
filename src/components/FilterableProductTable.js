@@ -35,14 +35,11 @@ class FilterableProductTable extends Component {
 			filterText: '',
 			inStockOnly: false,
 			showModal: false,
-			product: DEFAULT_PRODUCT
+			product: DEFAULT_PRODUCT,
+			productId: undefined
 		}
 	}
-
-	setProductModal = (child) => {
-		this.productModal = child;
-	}
-
+	
 	render() {
 		return (
 			<div>
@@ -66,6 +63,7 @@ class FilterableProductTable extends Component {
 				</Card>
 				<ProductModal 
 					product={this.state.product}
+					productId={this.state.productId}
 					showModal={this.state.showModal} 
 					onShowAndHideModal={this.onShowAndHideModal}  />
 			</div>

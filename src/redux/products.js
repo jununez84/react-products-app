@@ -7,9 +7,10 @@ export const products = (state = DEFAULT_STATE, action) => {
             return { ...state, isLoading: false, errMess: null, products: action.payload }
 
         case ActionTypes.ADD_PRODUCT:
+			const product = {...action.payload, id: state.products.length + 1};
             return {
                 ...state,
-                products: [...state.products, action.payload]
+                products: [...state.products, product]
             }
 
         case ActionTypes.PRODUCTS_LOADING:
@@ -17,15 +18,14 @@ export const products = (state = DEFAULT_STATE, action) => {
 
         case ActionTypes.PRODUCTS_FAILED:
             return { ...state, isLoading: false, errMess: action.payload }
-
-        case ActionTypes.SELECT_PRODUCT:
-            return { ...state, selectedProducts: [...state.selectedProducts, action.product] }
-
-        case ActionTypes.UNSELECT_PRODUCT:
-            return {
-                ...state,
-                selectedProducts: [...state.selectedProducts.filter(p => p !== action.product)]
-            }
+			
+		case ActionTypes.UPDATE_PRODUCT:
+			const updatedProducts = [...state.products];
+			const productToUpdate = updatedProducts.findIndex(x => x.id == action.payload.id);
+			updatedProducts[productToUpdate] = action.payload.product;
+			return {
+				products: updatedProducts
+			}
 
         default:
             return state

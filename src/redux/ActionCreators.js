@@ -19,6 +19,9 @@ export const fetchProducts = (dispatch) => {
                 throw errmess;
             })
         .then(response => response.json())
+		.then(products => products.map((product, index) => {
+			return {...product, id: index + 1};
+		}))
         .then(products => dispatch(addProducts(products)))
         .catch(error => dispatch(productsFailed(error.message)));
 }
@@ -42,12 +45,7 @@ export const addProduct = (product) => ({
     payload: product
 })
 
-export const selectProduct = product => ({
-    type: ActionTypes.SELECT_PRODUCT,
-    product
-})
-
-export const unSelectProduct = product => ({
-    type: ActionTypes.UNSELECT_PRODUCT,
-    product
+export const updateProduct = (id, product) => ({
+	type: ActionTypes.UPDATE_PRODUCT,
+	payload: {id, product}
 })

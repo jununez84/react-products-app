@@ -16,7 +16,7 @@ class ProductRow extends Component {
 	render() {
 		return(
 			<StyledRow onClick={()=> this.props.onUpdateProduct(this.props.product)}>
-				<td><Form.Check></Form.Check></td>
+				<td>{this.props.product.id}</td>
 				<td>{this.props.product.name}</td>
 				<td>{this.props.product.price}</td>
 			</StyledRow>

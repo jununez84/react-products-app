@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import {addProduct} from '../redux/ActionCreators';
+import {addProduct, updateProduct} from '../redux/ActionCreators';
 import { connect } from 'react-redux';
 
 const DEFAULT_PRODUCT = {
@@ -14,7 +14,6 @@ const DEFAULT_PRODUCT = {
 class ProductModal extends Component {
 	constructor(props) {
 		super(props);
-		console.log('ProductModal', props);
 		this.state = {
 			product: DEFAULT_PRODUCT
 		 };
@@ -26,13 +25,14 @@ class ProductModal extends Component {
 				category: product.category,
 				price: product.price,
 				name: product.name,
-				stocked: product.stocked
+				stocked: product.stocked,
+				id: product.id
 			}
 		});
 	}
 
 	componentDidUpdate(prevProps) {
-		if(prevProps.product.name !== this.props.product.name) {
+		if(prevProps.product !== this.props.product) {
 			this.setProduct(this.props.product);
 		}
 	}
@@ -86,30 +86,41 @@ class ProductModal extends Component {
 	}
 
 	handleChangeCategory = (e) => {
-		this.setState({...this.state.product, category: e.target.value});
+		const product = this.state.product;
+		product.category = e.target.value;
+		this.setState({product: product});
 	}
 
 	handleChangeName = (e) => {
-		this.setState({...this.state.product, name: e.target.value});
+		const product = this.state.product;
+		product.name = e.target.value;
+		this.setState({product: product});
 	}
 
 	handleChangePrice = (e) => {
-		this.setState({...this.state.product, price: e.target.value});
+		const product = this.state.product;
+		product.price = e.target.value;
+		this.setState({product: product});
 	}
 
 	handleChangeStocked = () => {
-		this.setState({...this.state.product, stocked: !this.state.stocked});
+		const product = this.state.product;
+		product.stocked = !this.state.product.stocked;
+		this.setState({product: product});
 	}
 
 	save = () => {
-		console.log(this.state.product);
-		this.props.dispatch(addProduct(this.state.product))
+		if(this.state.product.id === undefined)
+			this.props.dispatch(addProduct(this.state.product));
+		else
+			this.props.dispatch(updateProduct(this.state.product.id, this.state.product));
 		this.clear();
 	}
 
 	clear() {
 		this.setState({
-			product: DEFAULT_PRODUCT
+			product: DEFAULT_PRODUCT,
+			productId: undefined
 		});
 		this.props.onShowAndHideModal();
 	}

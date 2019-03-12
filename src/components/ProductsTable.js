@@ -53,7 +53,7 @@ class ProductsTable extends Component {
 			return [...acc,
 			<ProductRow
 				key={`${index}_${product.name}`}
-				product={product} 
+				product={product}
 				onUpdateProduct={this.props.onUpdateProduct}/>
 			]
 		}, categoryAccumulator)
@@ -66,10 +66,6 @@ class ProductsTable extends Component {
 			_.toLower(product.name).indexOf(_.toLower(filterText)) === -1 ||
 			inStockOnly && !product.stocked
 		)
-	}
-
-	isSelected(product) {
-		return this.props.productsRes.selectedProducts.includes(product)
 	}
 }
 
