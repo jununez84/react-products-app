@@ -20,25 +20,17 @@ const mapDispatchToProps = dispatch => ({
 class App extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			showModal: false
-		}
 	}
 
 	componentDidMount() {
 		this.props.fetchProducts()
 	}
 
-	onChangeShowModal = () => {
-		this.setState({ showModal: !this.state.showModal });
-		console.log(this.state.showModal);
-	}
-
 	render() {
 		return (
 			<React.Fragment>
 				<div className="App-header">
-					<FilterableProductTable showModal={this.state.showModal} onChangeShowModal={this.onChangeShowModal} />
+					<FilterableProductTable />
 				</div>
 			</React.Fragment>
 		);

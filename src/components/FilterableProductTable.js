@@ -8,7 +8,12 @@ import ProductModal from './ProductModal';
 import ProductsTable from './ProductsTable'
 import SearchBar from './SearchBar';
 
-const showState = false;
+const DEFAULT_PRODUCT = {
+	category: 'Sporting Goods',
+	price: '$0.00',
+	name: '',
+	stocked: true
+}
 
 const cardStyle = {
 	minWidth: 550,
@@ -28,8 +33,14 @@ class FilterableProductTable extends Component {
 		super(props);
 		this.state = {
 			filterText: '',
-			inStockOnly: false
+			inStockOnly: false,
+			showModal: false,
+			product: DEFAULT_PRODUCT
 		}
+	}
+
+	setProductModal = (child) => {
+		this.productModal = child;
 	}
 
 	render() {
@@ -46,11 +57,17 @@ class FilterableProductTable extends Component {
 							inStockOnly={this.state.inStockOnly}
 							onFilterTextChange={this.handleFilterTextChange}
 							onInStockOnlyChange={this.handleInStockChange} />
-						<ProductsTable filterText={this.state.filterText} inStockOnly={this.state.inStockOnly} />
-						<Button variant="light" onClick={this.props.onChangeShowModal}>ADD PRODUCT</Button>
+						<ProductsTable 
+							filterText={this.state.filterText} 
+							inStockOnly={this.state.inStockOnly} 
+							onUpdateProduct={this.onUpdateProduct}/>
+						<Button variant="light" onClick={this.onAddProduct}>ADD PRODUCT</Button>
 					</Card.Body>
 				</Card>
-				<ProductModal showModal={this.props.showModal} onChangeShowModal={this.props.onChangeShowModal} />
+				<ProductModal 
+					product={this.state.product}
+					showModal={this.state.showModal} 
+					onShowAndHideModal={this.onShowAndHideModal}  />
 			</div>
 		)
 	}
@@ -63,6 +80,20 @@ class FilterableProductTable extends Component {
 		this.setState({
 			inStockOnly: !this.state.inStockOnly
 		});
+	}
+
+	onAddProduct = () => {
+		this.setState({product: DEFAULT_PRODUCT});
+		this.setState({showModal: true});
+	}
+
+	onUpdateProduct = (product) => {
+		this.setState({product: product});
+		this.setState({showModal: true});
+	}
+
+	onShowAndHideModal = () => {
+		this.setState({showModal: !this.state.showModal});
 	}
 }
 

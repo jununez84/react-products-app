@@ -17,6 +17,10 @@ const mapStateToProps = state => {
 }
 
 class ProductsTable extends Component {
+	constructor(props) {
+		super(props);
+	}
+
 	render() {
 		return (
 			<Table style={tableStyle}>
@@ -49,7 +53,8 @@ class ProductsTable extends Component {
 			return [...acc,
 			<ProductRow
 				key={`${index}_${product.name}`}
-				product={product} />
+				product={product} 
+				onUpdateProduct={this.props.onUpdateProduct}/>
 			]
 		}, categoryAccumulator)
 	}

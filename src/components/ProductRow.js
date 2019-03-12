@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
+import styled from 'styled-components';
+
+const StyledRow = styled.tr`
+	cursor: pointer;
+	&:hover {
+		background-color: #d1c8f8;
+	}
+`
 
 class ProductRow extends Component {
 	constructor(props){
@@ -7,11 +15,11 @@ class ProductRow extends Component {
 	}
 	render() {
 		return(
-			<tr>
+			<StyledRow onClick={()=> this.props.onUpdateProduct(this.props.product)}>
 				<td><Form.Check></Form.Check></td>
 				<td>{this.props.product.name}</td>
 				<td>{this.props.product.price}</td>
-			</tr>
+			</StyledRow>
 		)
 	}
 }
